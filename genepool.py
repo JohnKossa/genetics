@@ -19,6 +19,7 @@ class Genepool(object):
         return fitness
 
     def select_for_fitness(self, keep_num):
+        #  TODO Modify this to accept an array of tests to run against all genes and an acceptance strategy
         fitness = self.calculate_fitnesses()
         fitness = sorted(fitness, key="fitness")
 
