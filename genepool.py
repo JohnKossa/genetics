@@ -12,20 +12,23 @@ class Genepool(object):
     def remove_gene(self, to_remove):
         self.genes.remove(to_remove)
 
-    def calculate_fitnesses(self):
+    def calculate_fitnesses(self, values_dict, answer):
         fitness = []
-        for val in self.genes:
-            fitness.append({"gene": val, "fitness": val.get_fitness()})
+        for gene in self.genes:
+            fitness.append({"gene": gene, "fitness": gene.get_fitness(values_dict, answer)})
         return fitness
 
-    def select_for_fitness(self, keep_num):
-        #  TODO Modify this to accept an array of tests to run against all genes and an acceptance strategy
-        fitness = self.calculate_fitnesses()
-        fitness = sorted(fitness, key="fitness")
+    #tests should contain an array of dicts
+    #dicts should contain an answer and a values dictionary
+    def select_for_fitness(self, keep_num, tests, strategy="closest"):
+        for test in tests:
+            fitnesses = self.calculate_fitnesses(test["values_dict"], test["answer"])
+            if strategy == "closest":
+                fitnesses = sorted(fitnesses, key=lambda k: k['fitness'], reverse=True)
 
         while len(self.genes) > keep_num:
-            self.remove_gene(fitness[0])
-            fitness.remove(fitness[0])
+            self.remove_gene(fitnesses[0]['gene'])
+            fitnesses.remove(fitnesses[0])
 
     def breed(self, desired_count, discard_old=True, strategy="uniform"):
         if discard_old:

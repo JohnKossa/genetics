@@ -16,8 +16,8 @@ class Gene(object):
 
         if strategy == "inherit":
             new_gene_alleles = {}
-            for k, v in self.alleles:
-                new_gene_alleles[k] = random.choice(v, other.alleles[k])
+            for k, v in self.alleles.items():
+                new_gene_alleles[k] = random.choice([v, other.alleles[k]])
             return Gene(new_gene_alleles)
 
     def get_fitness(self, values_dict, answer):
@@ -26,6 +26,6 @@ class Gene(object):
             raise ValueError("The gene and the value dictionary do not match and are incompatible.")
 
         sum = 0
-        for k, v in self.alleles:
+        for k, v in self.alleles.items():
             sum += v*values_dict[k]
         return abs(sum-answer)
