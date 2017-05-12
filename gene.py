@@ -19,6 +19,20 @@ class Gene(object):
             for k, v in self.alleles.items():
                 new_gene_alleles[k] = random.choice([v, other.alleles[k]])
             return Gene(new_gene_alleles)
+        elif strategy == "average":
+            # TODO: Check if the genes are scalar and can be averaged
+            new_gene_alleles = {}
+            for k, v in self.alleles.items():
+                new_gene_alleles[k] = (v+other.alleles[k])/2
+            return Gene(new_gene_alleles)
+        elif strategy == "blend":
+            # TODO: Check if the genes are scalar and can be averaged
+            # take a randomly weighted average between the two alleles
+            offset = random.random()
+            new_gene_alleles = {}
+            for k, v in self.alleles.items():
+                new_gene_alleles[k] = (offset * v + (1-offset) * other.alleles[k]) / 2
+            return Gene(new_gene_alleles)
 
     def get_fitness(self, values_dict, answer):
         #  pair alleles with corresponding values from values_dict and determine distance from answer
